@@ -19,7 +19,7 @@ on:
       magisk-preinit-device:
         type: string
         default: ''
-  
+   
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
     inputs:
@@ -59,12 +59,13 @@ on:
       magisk-version:
         description: Magisk version
         required: false
+
 jobs:
   build-device:
     runs-on: ubuntu-latest
     timeout-minutes: 20 # Make sure to not waste hours when some command does not return 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v4
         with:
           # Allow for switching to github-pages branch
           fetch-depth: 0
@@ -72,11 +73,14 @@ jobs:
         # Empty means, use version defined in rooted-ota.sh
         # Note the difference between github.event.inputs (workflow_dispatch) and inputs (workflow_call)
         run: |
+          # CHANGED: Default 'mustang' (Pixel 10 Pro XL)
           echo "DEVICE_ID=$(echo '${{ github.event.inputs.device-id || inputs.device-id || 'mustang' }}' | xargs)" >> $GITHUB_ENV
+          
           if [[ "${{ github.event.inputs.skip-rooted }}" != "true" ]]; then
+            # CHANGED: Defaulting to sda10 for Pixel 10 series (verify if root fails)
             echo "MAGISK_PREINIT_DEVICE=$(echo '${{ github.event.inputs.magisk-preinit-device || inputs.magisk-preinit-device || 'sda10' }}' | xargs)" >> $GITHUB_ENV
           fi
-          
+           
           echo "MAGISK_VERSION=$(echo '${{ github.event.inputs.magisk-version || '' }}' | xargs)" >> $GITHUB_ENV
           echo "OTA_VERSION=$(echo '${{ github.event.inputs.ota-version || '' }}' | xargs)" >> $GITHUB_ENV
           echo "FORCE_OTA_SERVER_UPLOAD=$(echo '${{ github.event.inputs.force-ota-server-upload || '' }}' | xargs)" >> $GITHUB_ENV
@@ -84,7 +88,7 @@ jobs:
           echo "UPLOAD_TEST_OTA=$(echo '${{ github.event.inputs.upload-test-ota || '' }}' | xargs)" >> $GITHUB_ENV
           echo "SKIP_ROOTLESS=$(echo '${{ github.event.inputs.skip-rootless || '' }}' | xargs)" >> $GITHUB_ENV
           echo "SKIP_RELEASE=$(echo '${{ github.event.inputs.skip-release || '' }}' | xargs)" >> $GITHUB_ENV
-          
+           
           if [[ "${{ github.event_name }}" == "push" ]]  || [[ "${{ github.event_name }}" == "pull_request" ]]; then
             echo "Running on push: Simple build without release for device $DEVICE_ID"
             echo "FORCE_BUILD=true" >> $GITHUB_ENV
@@ -97,9 +101,15 @@ jobs:
       - name: release
         env:
           GITHUB_REPO: ${{ github.repository }}
-          OTA_CHANNEL: "alpha"  # Change to "beta" or "alpha" if staging requires it
+          OTA_CHANNEL: "alpha"  # Staging channel for Pixel 10 (Mustang)
           KEY_AVB_BASE64: ${{ secrets.KEY_AVB_BASE64 }}
           CERT_OTA_BASE64: ${{ secrets.CERT_OTA_BASE64 }}
           KEY_OTA_BASE64: ${{ secrets.KEY_OTA_BASE64 }}
           PASSPHRASE_AVB: ${{ secrets.PASSPHRASE_AVB }}
           PASSPHRASE_OTA: ${{ secrets.PASSPHRASE_OTA }}
+        run: |
+          if [[ $SKIP_RELEASE == 'true' ]]; then
+            DEBUG=1 bash -c '. rooted-ota.sh && createRootedOta && createOtaServerData'
+          else
+            DEBUG=1 bash -c '. rooted-ota.sh && createAndReleaseRootedOta'
+          fi
