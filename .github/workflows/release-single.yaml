@@ -23,7 +23,7 @@ on:
         description: Device ID
         required: true
       magisk-preinit-device:
-        description: Magiskhttps://github.com/slapah/my-graphene-releases preinit device
+        description: Magisk preinit device
         required: false
       skip-rootless:
         description: skip building rootless OTA
@@ -104,8 +104,8 @@ jobs:
           git config --global user.name "GitHub Action"
           
           # 2. Change the 'origin' remote to point to your PUBLIC repo
-          # REPLACE 'slapah/YOUR_PUBLIC_REPO_NAME' BELOW!
-          git remote set-url origin https://slapah:${{ secrets.PUBLIC_REPO_TOKEN }}@github.com/slapah/YOUR_PUBLIC_REPO_NAME.git
+          # FIXED: Updated URL to use my-graphene-releases
+          git remote set-url origin https://slapah:${{ secrets.PUBLIC_REPO_TOKEN }}@github.com/slapah/my-graphene-releases.git
           
           # 3. Fetch the public repo history so we can sync to it
           git fetch origin
@@ -118,7 +118,6 @@ jobs:
       - name: release
         env:
           # Point the release script to the PUBLIC repo name
-          # REPLACE 'slapah/YOUR_PUBLIC_REPO_NAME' BELOW!
           GITHUB_REPO: slapah/my-graphene-releases
           
           OTA_CHANNEL: "alpha"
