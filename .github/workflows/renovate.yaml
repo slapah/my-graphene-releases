@@ -2,29 +2,31 @@ name: Renovate
 on:
   schedule:
     - cron: '0 20 * * *'
-  
   workflow_dispatch:
-  
-  # Rebase open PRs on push
+    inputs:
+      logLevel:
+        description: 'Log level'
+        required: false
+        default: 'debug'
   push:
     branches: [ main ]
-    
   pull_request:
     types: [synchronize, opened, reopened]
     paths:
       - .github/workflows/renovate.yaml
+
 jobs:
   renovate:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4  # <--- FIXED: Changed v5 to v4
+
       - name: Self-hosted Renovate
         uses: renovatebot/github-action@v43.0.20
         with:
           configurationFile: .github/renovate.json5
-          # https://docs.renovatebot.com/modules/platform/github/#running-using-a-fine-grained-token
           token: ${{ secrets.RENOVATE_TOKEN }}
-        env:
-            RENOVATE_REPOSITORIES: ${{ github.repository }}
-            LOG_LEVEL: ${{ inputs.logLevel || 'debug' }}
+        env: # <--- FIXED: Moved this back (unindented) so it is not inside 'with'
+          RENOVATE_REPOSITORIES: ${{ github.repository }}
+          LOG_LEVEL: ${{ inputs.logLevel || 'debug' }}}}
