@@ -1,7 +1,7 @@
 {
   "version": 2,
   "full": {
-    "location_ota": "https://github.com/slapah/my-graphene-releases/releases/download/2025113000/mustang-2025113000-dd28f93-rootless.zip",
-    "location_csig": "https://github.com/slapah/my-graphene-releases/releases/download/2025113000/mustang-2025113000-dd28f93-rootless.zip.csig"
+    "location_ota": "https://github.com/slapah/my-graphene-releases/releases/download/2025120400/mustang-2025120400-c50d57c-rootless.zip",
+    "location_csig": "https://github.com/slapah/my-graphene-releases/releases/download/2025120400/mustang-2025120400-c50d57c-rootless.zip.csig"
   }
 }
