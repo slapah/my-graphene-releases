@@ -28,7 +28,7 @@ GITHUB_REPO=${GITHUB_REPO:-''}
 MAGISK_PREINIT_DEVICE=${MAGISK_PREINIT_DEVICE:-}
 # Skip creation of rootless OTA by setting to "true"
 SKIP_ROOTLESS=${SKIP_ROOTLESS:-'false'}
-# https://staging.grapheneos.org/release
+# https://grapheneos.org/release
 OTA_VERSION=${OTA_VERSION:-'latest'}
 
 # It's recommended to pin magisk version in combination with AVB_ROOT_VERSION.
