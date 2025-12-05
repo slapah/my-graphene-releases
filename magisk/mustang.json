@@ -1,7 +1,7 @@
 {
   "version": 2,
   "full": {
-    "location_ota": "https://github.com/slapah/my-graphene-releases/releases/download/2025112500/mustang-2025112500-ff7688e-magisk-v29.0.zip",
-    "location_csig": "https://github.com/slapah/my-graphene-releases/releases/download/2025112500/mustang-2025112500-ff7688e-magisk-v29.0.zip.csig"
+    "location_ota": "https://github.com/slapah/my-graphene-releases/releases/download/2025113000/mustang-2025113000-dd28f93-magisk-v30.6.zip",
+    "location_csig": "https://github.com/slapah/my-graphene-releases/releases/download/2025113000/mustang-2025113000-dd28f93-magisk-v30.6.zip.csig"
   }
 }
